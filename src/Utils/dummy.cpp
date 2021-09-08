@@ -10,5 +10,5 @@ int getSumWithBase(int n , int b )
         return sum;
 }
 int main(){
-        cout<<getSumWithBase(216,100);
+        cout << getSumWithBase(216, 100);
 }
