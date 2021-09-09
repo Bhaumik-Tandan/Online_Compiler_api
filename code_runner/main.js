@@ -7,12 +7,13 @@ class Code {
     fn = "test", //file name
     args = "" //arguments
   ) {
+    this._e = 0; //shows program executed or not
     this.code = code;
     const path = require("path");
     this.fn = path.join(__dirname, fn) + "." + lang; //for platform independence
     this.run_com = Code.replace(Code.list[lang], this.fn, args);
-    this._output = "Server not responding";
-    this._error = "Server not responding";
+    this._output = "Execution pending";
+    this._error = "Execution pending";
   }
 
   file_exists() {
@@ -28,11 +29,15 @@ class Code {
   }
 
   run_file() {
-    if (!this.file_exists()) this.make_file();
+    if (!this.file_exists())  this.make_file();
 
     const { exec } = require("child_process");
-    exec(this.run_com, (error, stdout, stderr) => {
-      if (error) console.log(error);
+    const r = exec(this.run_com, (error, stdout, stderr) => {
+      if (error) 
+      {
+        this._error = stderr;
+        this._output = stdout;
+      }
       else if (stderr == "") {
         this._output = stdout;
         this._error = "No error";
@@ -41,14 +46,26 @@ class Code {
         this._output = stdout;
       }
     });
+    r.on("close", () => {
+      this._e = 1;
+      Code.fs.unlinkSync(this.fn);
+      console.log(this);//differnt
+    });
+    console.log(this);//differnt
   }
 
   get error() {
+    if (this._e == 0) this.run_file();
     return this._error;
   }
 
   get output() {
+    if (this._e == 0) this.run_file();
     return this._output;
+  }
+
+  get e() {
+    return this._e;
   }
 
   static replace(
@@ -62,5 +79,6 @@ class Code {
   }
 }
 
-a = new Code("print('exd')");
-a.run_file();
+module.exports.Code = Code;
+// a = new Code("print('exd')");
+// a.output;
