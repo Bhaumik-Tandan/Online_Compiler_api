@@ -1,4 +1,5 @@
-const code=require("./main.js").Code;
+const code=require("./code.js").Code;
+
 const l=`
 def Fibonacci(n):
    
@@ -27,7 +28,6 @@ a = new code(l);
 async function fun()
 {
     const b=await a.run_file();
-    console.log(b);
     console.log(a.output);
     console.log(a.error);
 }

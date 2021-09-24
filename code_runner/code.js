@@ -40,7 +40,6 @@ class Code {
     if (!this.file_exists())  this.make_file();
 
     const { exec } = require("child_process");
-
     return new Promise((resolve, reject) => { 
     const r=exec(this.run_com, (error, stdout, stderr) => {
       if (error) 
@@ -57,6 +56,7 @@ class Code {
       }
     });
 
+    
     r.on('close', (code) => {
       this._e = 1;
       this.delete_file()
