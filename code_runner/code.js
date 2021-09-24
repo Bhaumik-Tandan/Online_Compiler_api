@@ -44,16 +44,13 @@ class Code {
     const r=exec(this.run_com, (error, stdout, stderr) => {
       if (error) 
       {
-        this._error = error;
-        this._output = stdout;
-      }
-      else if (stderr == "") {
-        this._output = stdout;
-        this._error = "No error";
-      } else {
         this._error = stderr;
         this._output = stdout;
       }
+      else {
+        this._output = stdout;
+        this._error = "No error";
+      } 
     });
 
     

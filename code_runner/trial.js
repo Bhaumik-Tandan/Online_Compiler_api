@@ -1,8 +1,7 @@
 const code=require("./code.js").Code;
 
 const l=`
-def Fibonacci(n):
-   
+def Fibonacci(n)
     # Check if input is 0 then it will
     # print incorrect input
     if n < 0:
@@ -29,6 +28,9 @@ async function fun()
 {
     const b=await a.run_file();
     console.log(a.output);
-    console.log(a.error);
+    // console.log(a.error.killed);
+    // console.log(a.error.code);
+    // console.log(a.error.signal);
+    console.log(a.error)
 }
 fun();
