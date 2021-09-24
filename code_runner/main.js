@@ -7,7 +7,7 @@ class Code {
     fn = "test", //file name
     args = "" //arguments
   ) {
-    this._e = 0; //shows program executed or not
+    this._e = -1; //shows program executed or not
     this.code = code;
     const path = require("path");
     this.fn = path.join(__dirname, fn) + "." + lang; //for platform independence
@@ -32,10 +32,12 @@ class Code {
     if (!this.file_exists())  this.make_file();
 
     const { exec } = require("child_process");
-    const r = exec(this.run_com, (error, stdout, stderr) => {
+
+    return new Promise((resolve, reject) => { 
+    const r=exec(this.run_com, (error, stdout, stderr) => {
       if (error) 
       {
-        this._error = stderr;
+        this._error = error;
         this._output = stdout;
       }
       else if (stderr == "") {
@@ -46,26 +48,25 @@ class Code {
         this._output = stdout;
       }
     });
-    r.on("close", () => {
+
+    r.on('close', (code) => {
       this._e = 1;
-      Code.fs.unlinkSync(this.fn);
-      console.log(this);//differnt
-    });
-    console.log(this);//differnt
+      resolve(this);
+    });  
+
+  });
   }
+  
 
   get error() {
-    if (this._e == 0) this.run_file();
+    if (this._e == -1) this.run_file();
     return this._error;
   }
 
   get output() {
-    if (this._e == 0) this.run_file();
-    return this._output;
-  }
-
-  get e() {
-    return this._e;
+    if (this._e == -1)
+      return this.run_file();
+      return this._output;
   }
 
   static replace(
@@ -80,5 +81,3 @@ class Code {
 }
 
 module.exports.Code = Code;
-// a = new Code("print('exd')");
-// a.output;
