@@ -28,6 +28,14 @@ class Code {
     });
   }
 
+  delete_file()
+  {
+    Code.fs.unlinkSync(this.fn,(err)=>{
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
   run_file() {
     if (!this.file_exists())  this.make_file();
 
@@ -51,6 +59,7 @@ class Code {
 
     r.on('close', (code) => {
       this._e = 1;
+      this.delete_file()
       resolve(this);
     });  
 
