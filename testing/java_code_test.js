@@ -5,11 +5,11 @@ public class test
 {
     public static void main(String args[])
     {
-        System.out.println("dsf");
+        System.out.println("dsf"+args[0]+args[1]+args[2]);
     }
 }
 `;
-a = new code(l,"java");
+a = new code(l,"java","35 44 54");
 async function fun()
 {
     await a.run_file();

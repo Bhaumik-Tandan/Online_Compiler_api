@@ -10,12 +10,10 @@ class Code {
   ) {
     this._e = -1; //shows program executed or not
     this.code = code;
-    const path = require("path");
     this.lang=lang
     this.args=args;
     this.exe=exe;
-    this.file_path=__dirname;
-    this.fn = path.join(this.file_path, fn) + "." + lang; //for platform independence
+    this.fn =  fn+ "." + lang; //for platform independence
     this.interpreted_lang=this.lang_type();
   }
   

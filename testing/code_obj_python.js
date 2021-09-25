@@ -1,7 +1,7 @@
 const code=require("../code_runner/code.js").Code;
 
 const l=`
-def Fibonacci(n)
+def Fibonacci(n):
     # Check if input is 0 then it will
     # print incorrect input
     if n < 0:
