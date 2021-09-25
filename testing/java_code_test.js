@@ -1,6 +1,10 @@
 const code=require("../code_runner/code.js").Code;
 
 const l=`
+class A
+{
+    int a;
+}
 public class test
 {
     public static void main(String args[])
