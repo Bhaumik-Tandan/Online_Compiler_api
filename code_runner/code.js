@@ -11,7 +11,9 @@ class Code {
     this.code = code;
     const path = require("path");
     this.fn = path.join(__dirname, fn) + "." + lang; //for platform independence
+
     this.run_com = Code.replace(Code.list[lang], this.fn, args);
+
     this._output = "Execution pending";
     this._error = "Execution pending";
   }
