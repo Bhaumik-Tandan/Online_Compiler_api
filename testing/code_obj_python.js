@@ -28,9 +28,6 @@ async function fun()
 {
     const b=await a.run_file();
     console.log(a.output);
-    // console.log(a.error.killed);
-    // console.log(a.error.code);
-    // console.log(a.error.signal);
     console.log(a.error)
 }
 fun();

@@ -4,18 +4,29 @@ class Code {
   constructor(
     code = "print('Hello World')", //default code
     lang = "py", //language
+    args = "", //arguments
     fn = "test", //file name
-    args = "" //arguments
+    exe="test"//executable file name
   ) {
     this._e = -1; //shows program executed or not
     this.code = code;
     const path = require("path");
-    this.fn = path.join(__dirname, fn) + "." + lang; //for platform independence
+    this.lang=lang
+    this.args=args;
+    this.exe=exe;
+    this.file_path=__dirname;
+    this.fn = path.join(this.file_path, fn) + "." + lang; //for platform independence
+    this.interpreted_lang=this.lang_type();
+  }
+  
+  lang_type()
+  {
+    const index=Object.keys(Code.list).indexOf(this.lang);
 
-    this.run_com = Code.replace(Code.list[lang], this.fn, args);
+    if(index>Code.list["interpreted_till"])//interpreted languages are stored at the top
+     return false;
 
-    this._output = "Execution pending";
-    this._error = "Execution pending";
+     return true;
   }
 
   file_exists() {
@@ -30,6 +41,8 @@ class Code {
     });
   }
 
+
+
   delete_file()
   {
     Code.fs.unlinkSync(this.fn,(err)=>{
@@ -38,9 +51,9 @@ class Code {
       }
     });
   }
-  run_file() {
-    if (!this.file_exists())  this.make_file();
 
+  run_cmd()
+  {
     const { exec } = require("child_process");
     return new Promise((resolve, reject) => { 
     const r=exec(this.run_com, (error, stdout, stderr) => {
@@ -48,6 +61,7 @@ class Code {
       {
         this._error = stderr;
         this._output = stdout;
+        this.error_flag=1;
       }
       else {
         this._output = stdout;
@@ -58,16 +72,49 @@ class Code {
     
     r.on('close', (code) => {
       this._e = 1;
-      this.delete_file()
       resolve(this);
     });  
 
   });
   }
   
+   del_runned_files()
+  {
+    const { exec } = require("child_process");
+    exec(Code.list["del_"+this.lang]);
+  }
+
+  async run_file() {
+
+    if (!this.file_exists())  this.make_file();
+
+    this._output = "Execution pending";
+    this._error = "Execution pending";
+
+    if(this.interpreted_lang)
+    {
+      this.run_com = Code.replace(Code.list[this.lang], this.fn,this.args);
+      await this.run_cmd();
+      this.delete_file();
+      return;
+    }
+
+    this.run_com = Code.replace(Code.list[this.lang], this.fn,this.exe);
+    await this.run_cmd();
+    this.delete_file();
+
+    if(this.error_flag)//incase of compilation error
+    return;
+
+    this.run_com = Code.replace(Code.list["run_"+this.lang], this.exe,this.args);
+    await this.run_cmd();
+    this.del_runned_files();
+  }
+  
 
   get error() {
-    if (this._e == -1) this.run_file();
+    if (this._e == -1) 
+    return this.run_file();
     return this._error;
   }
 
