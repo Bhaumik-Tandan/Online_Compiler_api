@@ -10,7 +10,7 @@
     "js":"node {} {}",
     "rb":"ruby {} {}",
 
-    "c":"gcc {} -o {}",
+    "c":"gcc {} -o {} -fno-stack-protector",
     "run_c":"{} {}",
     "del_c":"del *.exe",
 
