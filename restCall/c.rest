@@ -20,6 +20,6 @@ POST http://localhost:8080
 content-type: application/json
 
 {
-    "code": "#include<stdio.h>\nmain()\n{\n  printf(\"%d\",5/0);\n}",
+    "code": "#include<stdio.h>\nmain()\n{\n  printf(\"%d\",5);\n}",
     "lang": "cpp"
 }
